@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText txtUserName, txtPassword;
     private Button btnLogin, btnExit;
     private List<Account> listAccount;
+    private Account acc;
     private Disposable disposable;
 
 
@@ -48,23 +49,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         reference();
-        getAllAccount();
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String userName = txtUserName.getText().toString();
                 String password = txtPassword.getText().toString();
-                if(checkLogin(userName, password)){
-                    Account acc = getAccountLogin(userName,password);
-                    DataLocalManager.setAccount(acc);
-                    Intent intent = new Intent(MainActivity.this, StoreActivity.class);
-                    startActivity(intent);
-                    Toast.makeText(MainActivity.this, "Dang nhap thanh cong", Toast.LENGTH_SHORT).show();
-
-                } else{
-                    Toast.makeText(MainActivity.this, "Sai thong tin dang nhap", Toast.LENGTH_SHORT).show();
-                }
+                checkLogin(userName, password);
             }
         });
     }
@@ -78,12 +69,12 @@ public class MainActivity extends AppCompatActivity {
         btnExit = findViewById(R.id.btnExit);
 
         listAccount = new ArrayList<>();
+
+        acc = new Account();
     }
 
-
-    //read json from API
-    private void getAllAccount(){
-        ApiService.apiService.callApiAccont()
+    private void checkLogin(String username, String pass){
+        ApiService.apiService.callApiCheckLogin(username, pass)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<List<Account>>() {
@@ -95,40 +86,29 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onNext(@NonNull List<Account> accounts) {
                         listAccount = accounts;
+
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-                        Toast.makeText(MainActivity.this, "Error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+
                     }
 
                     @Override
                     public void onComplete() {
-
+                        checkAcc(listAccount, username, pass);
                     }
                 });
     }
 
-    //check account to login
-    private boolean checkLogin(String userName, String password){
-        for(int i =0;i<listAccount.size();i++){
-            Account account = listAccount.get(i);
-            if(account.getUserName().equals(userName) && account.getPassword().equals(password)){
-                return true;
-            }
+    private void checkAcc(List<Account> list,String username, String pass){
+        if(list.get(0).getUserName() !=null && list.get(0).getPassword()!=null){
+            DataLocalManager.setAccount(list.get(0));
+            Intent intent = new Intent(MainActivity.this, StoreActivity.class);
+            startActivity(intent);
+        } else{
+            Toast.makeText(MainActivity.this, "Sai thong tin dang nhap", Toast.LENGTH_SHORT).show();
         }
-        return false;
-
-    }
-
-    private Account getAccountLogin(String userName, String pass){
-        for(int i =0;i<listAccount.size();i++){
-            Account account = listAccount.get(i);
-            if(account.getUserName().equals(userName) && account.getPassword().equals(pass)){
-                return account;
-            }
-        }
-        return null;
     }
 
     @Override
