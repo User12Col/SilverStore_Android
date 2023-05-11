@@ -5,11 +5,15 @@
       <map>
         <entry key="..\:/ChuongTrinh/Mobile/SilverStore_App/app/src/main/res/font/font_main.xml" value="0.1712962962962963" />
         <entry key="..\:/ChuongTrinh/Mobile/SilverStore_App/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/ChuongTrinh/Mobile/SilverStore_App/app/src/main/res/layout/activity_make_order.xml" value="0.2" />
         <entry key="..\:/ChuongTrinh/Mobile/SilverStore_App/app/src/main/res/layout/activity_product.xml" value="0.2" />
         <entry key="..\:/ChuongTrinh/Mobile/SilverStore_App/app/src/main/res/layout/activity_store.xml" value="0.2" />
         <entry key="..\:/ChuongTrinh/Mobile/SilverStore_App/app/src/main/res/layout/cartitem_layout.xml" value="0.2" />
+        <entry key="..\:/ChuongTrinh/Mobile/SilverStore_App/app/src/main/res/layout/fragment_cart.xml" value="0.2" />
         <entry key="..\:/ChuongTrinh/Mobile/SilverStore_App/app/src/main/res/layout/fragment_home.xml" value="0.2" />
+        <entry key="..\:/ChuongTrinh/Mobile/SilverStore_App/app/src/main/res/layout/orderitem_layout.xml" value="0.33" />
         <entry key="..\:/ChuongTrinh/Mobile/SilverStore_App/app/src/main/res/menu/navigation_menu.xml" value="0.2" />
+        <entry key="..\:/ChuongTrinh/Mobile/SilverStore_App/app/src/main/res/menu/search_menu.xml" value="0.19895833333333332" />
       </map>
     </option>
   </component>

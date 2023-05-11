@@ -28,7 +28,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/aliquam_nx00">
-
+            app:actionViewClass="androidx.appcompat.widget.SearchView
         </EditText>
 
     </LinearLayout>

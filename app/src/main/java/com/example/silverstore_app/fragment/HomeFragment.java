@@ -1,8 +1,12 @@
 package com.example.silverstore_app.fragment;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -13,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -50,6 +56,7 @@ public class HomeFragment extends Fragment {
     private Spinner spnCate, spnPrice, spnAtoZ;
     private RecyclerView rclProduct;
     private ItemProductAdapter itemProductAdapter;
+    private SearchView searchView;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -60,6 +67,7 @@ public class HomeFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_home, container, false);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         reference();
+        setHasOptionsMenu(true);
         getAllProduct();
         setAdapterSpinner();
 
@@ -111,6 +119,7 @@ public class HomeFragment extends Fragment {
 
             }
         });
+
 
 
         return view;
@@ -216,6 +225,32 @@ public class HomeFragment extends Fragment {
     private void sortDecreasing(List<Product> itemList){
         Collections.sort(itemList);
         Collections.reverse(itemList);
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(@androidx.annotation.NonNull Menu menu, @androidx.annotation.NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.search_menu, menu);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.itemSearch).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+        searchView.setMaxWidth(Integer.MAX_VALUE);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                itemProductAdapter.getFilter().filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                itemProductAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     //load data into recycle view

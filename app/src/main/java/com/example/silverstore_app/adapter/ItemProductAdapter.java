@@ -3,6 +3,8 @@ package com.example.silverstore_app.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,12 +18,15 @@ import com.example.silverstore_app.api.IClickItemProductListener;
 import com.example.silverstore_app.model.Product;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class ItemProductAdapter extends RecyclerView.Adapter<ItemProductAdapter.ItemProductHolder>{
+public class ItemProductAdapter extends RecyclerView.Adapter<ItemProductAdapter.ItemProductHolder> implements Filterable {
 
     private Fragment fragment;
     private List<Product> itemProductList;
+    private List<Product> itemProductListOld;
     private IClickItemProductListener iClickItemProductListener;
 
     public ItemProductAdapter(Fragment fragment, IClickItemProductListener iClickItemProductListener) {
@@ -31,6 +36,7 @@ public class ItemProductAdapter extends RecyclerView.Adapter<ItemProductAdapter.
 
     public void setData(List<Product> list){
         this.itemProductList = list;
+        this.itemProductListOld = list;
         notifyDataSetChanged();
     }
 
@@ -71,6 +77,37 @@ public class ItemProductAdapter extends RecyclerView.Adapter<ItemProductAdapter.
             return itemProductList.size();
         }
         return 0;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String txtSearch = charSequence.toString();
+                if(txtSearch.isEmpty()){
+                    itemProductList = itemProductListOld;
+                } else{
+                    List<Product> list = new ArrayList<>();
+                    for(Product pro: itemProductListOld){
+                        if(pro.getProName().toLowerCase().contains(txtSearch.toLowerCase())){
+                            list.add(pro);
+                        }
+                    }
+
+                    itemProductList = list;
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = itemProductList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                itemProductList = (List<Product>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class ItemProductHolder extends RecyclerView.ViewHolder {

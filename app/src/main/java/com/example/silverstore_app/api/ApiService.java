@@ -81,4 +81,13 @@ public interface ApiService {
                                       @Query("accID") int accID);
 
 
+    ////http://localhost/APIAndroid/api/customer/create.php
+    @POST("api/customer/create.php")
+    Observable<String> callApiAddCus(@Query("name") String name,
+                                      @Query("phone") String phone,
+                                      @Query("email") String email,
+                                      @Query("address") String address,
+                                      @Query("accID") int accID);
+
+
 }

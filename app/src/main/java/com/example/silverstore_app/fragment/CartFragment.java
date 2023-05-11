@@ -1,9 +1,11 @@
 package com.example.silverstore_app.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -11,6 +13,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.silverstore_app.MakeOrderActivity;
 import com.example.silverstore_app.R;
 import com.example.silverstore_app.StoreActivity;
 import com.example.silverstore_app.adapter.ItemCartAdapter;
@@ -35,6 +38,7 @@ public class CartFragment extends Fragment {
     private List<Cart> itemCartList;
     private RecyclerView rclCart;
     private Disposable disposable;
+    private Button btnPay;
 
     public CartFragment() {
         // Required empty public constructor
@@ -47,7 +51,15 @@ public class CartFragment extends Fragment {
         reference();
         Account acc = DataLocalManager.getAccount();
         getCartByID(acc.getAccID());
-        //getAllCart();
+
+        btnPay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity().getApplicationContext(), itemCartList.get(0).getProName(), Toast.LENGTH_SHORT).show();
+                //Intent intent = new Intent(getActivity().getApplicationContext(), MakeOrderActivity.class);
+                //startActivity(intent);
+            }
+        });
 
         return view;
     }
@@ -55,37 +67,12 @@ public class CartFragment extends Fragment {
     private void reference(){
         rclCart = view.findViewById(R.id.rclCart);
 
+        btnPay =view.findViewById(R.id.btnPay);
+
         itemCartList = new ArrayList<>();
 
         itemCartAdapter = new ItemCartAdapter(this);
 
-    }
-
-    private void getAllCart(){
-        ApiService.apiService.callApiCart()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<List<Cart>>() {
-                    @Override
-                    public void onSubscribe(@NonNull Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(@NonNull List<Cart> carts) {
-                        itemCartList = carts;
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        loadRclCart(itemCartList, itemCartAdapter);
-                    }
-                });
     }
 
     private void getCartByID(int accID){

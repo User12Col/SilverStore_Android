@@ -56,7 +56,7 @@ public class ItemCartAdapter extends RecyclerView.Adapter<ItemCartAdapter.ItemCa
             @Override
             public void onClick(View view) {
                 int quantity = Integer.parseInt(holder.txtQuantityCart.getText().toString());
-                if(quantity >=1){
+                if(quantity >1){
                     int rs = quantity - 1;
                     holder.txtQuantityCart.setText(String.valueOf(rs));
                 }
